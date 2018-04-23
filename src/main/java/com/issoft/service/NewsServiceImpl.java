@@ -5,8 +5,8 @@ import com.issoft.repository.NewsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.Set;
+import java.time.Instant;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -22,7 +22,7 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     public void createNews(News news) {
-        news.setDateTime(LocalDateTime.now());
+        news.setDateTime(Instant.now());
         newsRepository.save(news);
     }
 
@@ -32,19 +32,19 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public Set<News> receiveAllNews() {
+    public List<News> receiveAllNews() {
         Iterable<News> newsIterable = newsRepository.findAll();
-        return StreamSupport.stream(newsIterable.spliterator(), false).collect(Collectors.toSet());
+        return StreamSupport.stream(newsIterable.spliterator(), false).collect(Collectors.toList());
     }
 
     @Override
-    public Set<News> receiveAllNewsByAuthorId(Long id) {
+    public List<News> receiveAllNewsByAuthorId(Long id) {
         return newsRepository.findAllNewsByAuthorId(id);
     }
 
     @Override
     public void updateNews(News news) {
-        news.setDateTime(LocalDateTime.now());
+        news.setDateTime(Instant.now());
         newsRepository.save(news);
     }
 

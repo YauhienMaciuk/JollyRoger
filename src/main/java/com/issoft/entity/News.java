@@ -1,13 +1,15 @@
 package com.issoft.entity;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Entity
-@Data
+@Getter
+@Setter
 @Table(name = "News")
 public class News implements Serializable {
 
@@ -15,18 +17,13 @@ public class News implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "Author_ID")
     private Long authorId;
 
-    @Column(name = "Title")
     private String title;
 
-    @Column(name = "Description")
     private String Description;
 
-    @Column(name = "Text")
     private String text;
 
-    @Column(name = "Date_Time")
-    private LocalDateTime dateTime;
+    private Instant dateTime;
 }

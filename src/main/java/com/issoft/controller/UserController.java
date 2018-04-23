@@ -1,33 +1,36 @@
 package com.issoft.controller;
 
+import com.issoft.dto.UserDto;
 import com.issoft.entity.User;
 import com.issoft.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Set;
+import java.net.URI;
+import java.util.List;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
 
-    private UserService userService;
+    private final UserService userService;
+    private final ModelMapper modelMapper;
 
-    @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, ModelMapper modelMapper) {
         this.userService = userService;
+        this.modelMapper = modelMapper;
     }
 
-    @PostMapping(path = "/create", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Void> createUser(@RequestBody User user) {
+    @PostMapping
+    public ResponseEntity<Void> createUser(@RequestBody UserDto userDto) {
+        User user = convertToUser(userDto);
         userService.createUser(user);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.created(URI.create("/user/" + user.getId())).build();
     }
 
     @GetMapping("/all")
-    public ResponseEntity<Set<User>> receiveUsers() {
+    public ResponseEntity<List<User>> receiveUsers() {
         return ResponseEntity.ok(userService.receiveUsers());
     }
 
@@ -36,15 +39,20 @@ public class UserController {
         return ResponseEntity.ok(userService.receiveUser(userId));
     }
 
-    @DeleteMapping("/delete/{userId}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long userId) {
         userService.deleteUser(userId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/update")
-    public ResponseEntity<Void> updateUser(@RequestBody User user) {
+    public ResponseEntity<Void> updateUser(@RequestBody UserDto userDto) {
+        User user = convertToUser(userDto);
         userService.updateUser(user);
         return ResponseEntity.ok().build();
+    }
+
+    private User convertToUser(UserDto userDto) {
+        return modelMapper.map(userDto, User.class);
     }
 }

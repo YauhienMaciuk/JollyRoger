@@ -1,55 +1,62 @@
 package com.issoft.controller;
 
+import com.issoft.dto.NewsDto;
 import com.issoft.entity.News;
 import com.issoft.service.NewsService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Set;
+import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/news")
 public class NewsController {
 
-    private NewsService newsService;
+    private final NewsService newsService;
+    private final ModelMapper modelMapper;
 
-    @Autowired
-    public NewsController(NewsService newsService) {
+    public NewsController(NewsService newsService, ModelMapper modelMapper) {
         this.newsService = newsService;
+        this.modelMapper = modelMapper;
     }
 
-    @PostMapping(path = "/create", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Void> createNews(@RequestBody News news) {
+    @PostMapping
+    public ResponseEntity<Void> createNews(@RequestBody NewsDto newsDto) {
+        News news = convertToNews(newsDto);
         newsService.createNews(news);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.created(URI.create("news/?id=" + news.getId())).build();
     }
 
-    @GetMapping("/receive_news/{newsId}")
+    @GetMapping("/{newsId}")
     public ResponseEntity<News> receiveNews(@PathVariable Long newsId) {
         return ResponseEntity.ok(newsService.receiveNews(newsId));
     }
 
     @GetMapping("/all")
-    public ResponseEntity<Set<News>> receiveAllNews() {
+    public ResponseEntity<List<News>> receiveAllNews() {
         return ResponseEntity.ok(newsService.receiveAllNews());
     }
 
-    @GetMapping("/all/user_id/{authorId}")
-    public ResponseEntity<Set<News>> receiveAllNewsByAuthorId(@PathVariable Long authorId) {
+    @GetMapping("/all/{authorId}")
+    public ResponseEntity<List<News>> receiveAllNewsByAuthorId(@PathVariable Long authorId) {
         return ResponseEntity.ok(newsService.receiveAllNewsByAuthorId(authorId));
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<Void> updateNews(@RequestBody News news) {
-        newsService.updateNews(news);
+    @PutMapping
+    public ResponseEntity<Void> updateNews(@RequestBody NewsDto newsDto) {
+        newsService.updateNews(convertToNews(newsDto));
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteNews(Long id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteNews(@PathVariable Long id) {
         newsService.deleteNews(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
+    }
+
+    private News convertToNews(NewsDto newsDto) {
+        return modelMapper.map(newsDto, News.class);
     }
 }

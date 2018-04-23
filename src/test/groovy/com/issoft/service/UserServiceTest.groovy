@@ -4,7 +4,6 @@ import com.issoft.entity.User
 import org.apache.commons.lang.RandomStringUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.dao.InvalidDataAccessApiUsageException
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Stepwise
@@ -15,7 +14,7 @@ import java.util.function.Consumer
 
 @Stepwise
 @SpringBootTest
-class UserServiceSpec extends Specification {
+class UserServiceTest extends Specification {
 
     @Autowired
     UserService userService

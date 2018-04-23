@@ -2,11 +2,11 @@ package com.issoft.service;
 
 import com.issoft.entity.User;
 
-import java.util.Set;
+import java.util.List;
 
 public interface UserService {
 
-    Set<User> receiveUsers();
+    List<User> receiveUsers();
 
     void createUser(User user);
 

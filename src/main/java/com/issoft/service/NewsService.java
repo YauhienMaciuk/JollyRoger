@@ -2,7 +2,7 @@ package com.issoft.service;
 
 import com.issoft.entity.News;
 
-import java.util.Set;
+import java.util.List;
 
 public interface NewsService {
 
@@ -10,9 +10,9 @@ public interface NewsService {
 
     News receiveNews(Long id);
 
-    Set<News> receiveAllNews();
+    List<News> receiveAllNews();
 
-    Set<News> receiveAllNewsByAuthorId(Long id);
+    List<News> receiveAllNewsByAuthorId(Long id);
 
     void updateNews(News news);
 

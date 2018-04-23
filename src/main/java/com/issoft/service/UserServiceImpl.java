@@ -5,8 +5,8 @@ import com.issoft.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.Set;
+import java.time.Instant;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -22,14 +22,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void createUser(User user) {
-        user.setBirthDay(LocalDateTime.now());
+        user.setBirthDay(Instant.now());
         userRepository.save(user);
     }
 
     @Override
-    public Set<User> receiveUsers() {
+    public List<User> receiveUsers() {
         Iterable<User> userIterable = userRepository.findAll();
-        return StreamSupport.stream(userIterable.spliterator(), false).collect(Collectors.toSet());
+        return StreamSupport.stream(userIterable.spliterator(), false).collect(Collectors.toList());
     }
 
     @Override
@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUser(User user) {
-        user.setBirthDay(LocalDateTime.now());
+        user.setBirthDay(Instant.now());
         userRepository.save(user);
     }
 }

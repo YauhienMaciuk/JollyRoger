@@ -44,6 +44,9 @@ dependencies {
     compile('org.codehaus.groovy:groovy-all:2.4.15')
     compile('org.springframework.boot:spring-boot-starter-test')
 
-    //for generate random string
+    //to transform from dto to POJO and vice versa
+    compile('org.modelmapper:modelmapper:0.7.5')
+
+    //to generate random string
     compile('commons-lang:commons-lang:2.6')
 }
